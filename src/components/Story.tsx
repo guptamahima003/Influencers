@@ -1,7 +1,7 @@
 "use client";
 
 import Image from 'next/image';
-import { Story as StoryType } from '@/types';
+import { Story as StoryType } from '../types';
 
 interface StoryProps {
   story: StoryType;
