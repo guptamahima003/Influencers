@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import { Play, Pause, Volume2, X } from 'lucide-react';
 import Image from 'next/image';
 
@@ -22,7 +22,7 @@ export default function YouTubeShorts() {
   const [isPlaying, setIsPlaying] = useState(false);
 
   // Add ref for grid videos
-  const gridVideoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+  const videoRefs = shorts.map(() => useRef<HTMLVideoElement>(null));
 
   const shorts: YouTubeShort[] = [
     {
@@ -112,16 +112,16 @@ export default function YouTubeShorts() {
     }, options);
 
     // Observe all grid videos
-    gridVideoRefs.current.forEach((videoRef) => {
-      if (videoRef) {
-        observer.observe(videoRef);
+    videoRefs.forEach((videoRef) => {
+      if (videoRef.current) {
+        observer.observe(videoRef.current);
       }
     });
 
     return () => {
-      gridVideoRefs.current.forEach((videoRef) => {
-        if (videoRef) {
-          observer.unobserve(videoRef);
+      videoRefs.forEach((videoRef) => {
+        if (videoRef.current) {
+          observer.unobserve(videoRef.current);
         }
       });
     };
@@ -156,14 +156,15 @@ export default function YouTubeShorts() {
             {/* Video Preview with Premium Overlay */}
             <div className="absolute inset-0 w-full h-full bg-black">
               <video
-                ref={el => gridVideoRefs.current[index] = el}
+                ref={videoRefs[index]}
                 className="w-full h-full object-cover"
                 playsInline
                 loop
                 muted
-                src={short.videoUrl}
-                poster={short.thumbnailUrl}
-              />
+                controls={false}
+              >
+                <source src={short.videoUrl} type="video/mp4" />
+              </video>
               <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/90" />
               <div className="absolute inset-0 bg-[#0046BE]/20" />
             </div>
