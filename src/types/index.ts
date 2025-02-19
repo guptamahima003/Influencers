@@ -30,10 +30,11 @@ export interface ProductDetails {
   id: string;
   title: string;
   price: number;
-  originalPrice?: number;
-  rating: number;
-  reviewCount: number;
   images: string[];
-  pickupDate: string;
-  options: ProductOption[];
+  image?: string;
+  quantity: number;
+  rating?: number;
+  reviewCount?: number;
+  pickupDate?: string;
+  options?: ProductOption[];
 } 

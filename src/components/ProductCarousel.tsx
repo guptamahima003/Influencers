@@ -103,7 +103,6 @@ export default function ProductCarousel({ category }: ProductCarouselProps) {
       title: product.title,
       price: product.price,
       images: product.images,
-      image: product.images[0],
       quantity: 1
     });
     setShowSnackbar(true);
