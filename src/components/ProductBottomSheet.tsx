@@ -106,10 +106,17 @@ export default function ProductBottomSheet({ isOpen, onClose, product }: Product
                 <div className="flex items-center gap-2 mt-2">
                   <div className="flex items-center">
                     {[...Array(5)].map((_, i) => (
-                      <span key={i} className={i < Math.floor(product.rating) ? 'text-[#FFD700]' : 'text-gray-200'}>★</span>
+                      <span 
+                        key={i} 
+                        className={i < Math.floor(product.rating || 0) ? 'text-[#FFD700]' : 'text-gray-200'}
+                      >
+                        ★
+                      </span>
                     ))}
                   </div>
-                  <span className="text-sm text-gray-500">({product.reviewCount})</span>
+                  <span className="text-sm text-gray-500">
+                    ({product.reviewCount || 0})
+                  </span>
                 </div>
               </div>
 
