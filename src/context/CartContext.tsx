@@ -48,13 +48,4 @@ export function useCart() {
     throw new Error('useCart must be used within a CartProvider');
   }
   return context;
-}
-
-export interface ProductDetails {
-  id: string;
-  title: string;
-  price: number;
-  images?: string[]; // If you're using an array of images
-  image?: string;    // Add this for single image support
-  quantity: number;
 } 
