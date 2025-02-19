@@ -14,6 +14,37 @@ interface YouTubeShort {
   thumbnailUrl?: string;
 }
 
+const shorts: YouTubeShort[] = [
+  {
+    username: "Best Buy",
+    profileImage: "https://randomuser.me/api/portraits/men/21.jpg",
+    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
+    description: "Check out the latest tech at Best Buy! #bestbuy #tech",
+    followers: 1200000
+  },
+  {
+    username: "Tech Deals",
+    profileImage: "https://randomuser.me/api/portraits/men/22.jpg",
+    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
+    description: "Best Buy Gaming Laptop Deals 2024 #gaming #laptops",
+    followers: 850000
+  },
+  {
+    username: "Gadget Guide",
+    profileImage: "https://randomuser.me/api/portraits/men/23.jpg",
+    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4',
+    description: "Top 5 Smartphones at Best Buy #phones #tech",
+    followers: 950000
+  },
+  {
+    username: "Tech Today",
+    profileImage: "https://randomuser.me/api/portraits/men/24.jpg",
+    videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4',
+    description: "Best Buy Home Theater Setup Guide #hometheater",
+    followers: 750000
+  }
+];
+
 export default function YouTubeShorts() {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [currentShortIndex, setCurrentShortIndex] = useState(0);
@@ -21,39 +52,8 @@ export default function YouTubeShorts() {
   const [isMuted, setIsMuted] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  // Add ref for grid videos
+  // Add ref for grid videos after shorts declaration
   const videoRefs = shorts.map(() => useRef<HTMLVideoElement>(null));
-
-  const shorts: YouTubeShort[] = [
-    {
-      username: "Best Buy",
-      profileImage: "https://randomuser.me/api/portraits/men/21.jpg",
-      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
-      description: "Check out the latest tech at Best Buy! #bestbuy #tech",
-      followers: 1200000
-    },
-    {
-      username: "Tech Deals",
-      profileImage: "https://randomuser.me/api/portraits/men/22.jpg",
-      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
-      description: "Best Buy Gaming Laptop Deals 2024 #gaming #laptops",
-      followers: 850000
-    },
-    {
-      username: "Gadget Guide",
-      profileImage: "https://randomuser.me/api/portraits/men/23.jpg",
-      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4',
-      description: "Top 5 Smartphones at Best Buy #phones #tech",
-      followers: 950000
-    },
-    {
-      username: "Tech Today",
-      profileImage: "https://randomuser.me/api/portraits/men/24.jpg",
-      videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4',
-      description: "Best Buy Home Theater Setup Guide #hometheater",
-      followers: 750000
-    }
-  ];
 
   const handleTap = (index: number) => {
     setCurrentShortIndex(index);
