@@ -10,6 +10,7 @@ export const mockProduct = {
     'https://picsum.photos/id/2/400/400',
     'https://picsum.photos/id/3/400/400'
   ],
+  quantity: 1,
   pickupDate: 'Mar 3',
   options: [
     {
