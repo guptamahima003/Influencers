@@ -21,12 +21,14 @@ interface ProductDetails {
   id: string;
   title: string;
   price: number;
-  originalPrice?: number;
-  rating: number;
-  reviewCount: number;
   images: string[];
-  pickupDate: string;
-  options: ProductOption[];
+  image?: string;
+  quantity: number;
+  rating?: number;
+  reviewCount?: number;
+  pickupDate?: string;
+  options?: ProductOption[];
+  originalPrice?: number;
 }
 
 interface ProductBottomSheetProps {
@@ -42,7 +44,10 @@ export default function ProductBottomSheet({ isOpen, onClose, product }: Product
   const [showSnackbar, setShowSnackbar] = useState(false);
 
   const handleAddToCart = () => {
-    addToCart(product);
+    addToCart({
+      ...product,
+      quantity: 1
+    });
     setShowSnackbar(true);
   };
 
