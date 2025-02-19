@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Reset default margins and ensure full viewport coverage */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+:root {
+  --primary: #00B4D8;
+  --primary-light: #90E0EF;
+  --primary-dark: #0077B6;
+  --accent: #FFD700;
+  --accent-dark: #FFC000;
+  --background: #F8FDFF;
+  --surface: #FFFFFF;
+  --text: #023E8A;
+  --text-light: #48CAE4;
+}
+
+body {
+  color: var(--text);
+  background: var(--background);
+} 
