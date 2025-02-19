@@ -10,6 +10,7 @@ import YouTubeShorts from '../components/YouTubeShorts';
 import { mockProduct } from '../data/mockProducts';
 import { ShoppingCart } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import CategorySection from '../components/CategorySection';
 
 const stories: StoryType[] = [
   {
@@ -255,20 +256,28 @@ export default function Home() {
         <PremiumHeader />
 
         {/* Stories Section */}
-        <div className="py-2 backdrop-blur-sm border-b border-[#90E0EF]/20">
-          <div className="overflow-x-auto scrollbar-hide">
-            <div className="flex gap-3 px-4 items-center">
-              {stories.map((story, index) => (
-                <Story
-                  key={story.id}
-                  story={story}
-                  onClick={handleStoryClick}
-                  index={index}
-                />
-              ))}
+        <div>
+          <h2 className="text-[#0077B6] font-bold text-lg px-4 py-3">
+            Guide to influencers' go-to gadgets
+          </h2>
+          <div className="py-2 backdrop-blur-sm border-b border-[#90E0EF]/20">
+            <div className="overflow-x-auto scrollbar-hide">
+              <div className="flex gap-3 px-4 items-center">
+                {stories.map((story, index) => (
+                  <Story
+                    key={story.id}
+                    story={story}
+                    onClick={handleStoryClick}
+                    index={index}
+                  />
+                ))}
+              </div>
             </div>
           </div>
         </div>
+
+        {/* Category Section */}
+        <CategorySection />
 
         {/* Feed Section */}
         <div className="px-4">
