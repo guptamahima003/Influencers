@@ -39,8 +39,12 @@ interface ProductBottomSheetProps {
 
 export default function ProductBottomSheet({ isOpen, onClose, product }: ProductBottomSheetProps) {
   const { addToCart } = useCart();
-  const [selectedColor, setSelectedColor] = useState(product.options[0].values[0].id);
-  const [selectedStorage, setSelectedStorage] = useState(product.options[1].values[0].id);
+  const [selectedColor, setSelectedColor] = useState(
+    product.options?.[0]?.values?.[0]?.id || ''
+  );
+  const [selectedStorage, setSelectedStorage] = useState(
+    product.options?.[1]?.values?.[0]?.id || ''
+  );
   const [showSnackbar, setShowSnackbar] = useState(false);
 
   const handleAddToCart = () => {
@@ -126,65 +130,69 @@ export default function ProductBottomSheet({ isOpen, onClose, product }: Product
               </div>
 
               {/* Color Options */}
-              <div className="space-y-3">
-                <div className="flex justify-between items-center">
-                  <span className="font-medium text-gray-600">Color</span>
-                  <ChevronDown size={20} className="text-gray-400" />
+              {product.options?.[0]?.values && (
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium text-gray-600">Color</span>
+                    <ChevronDown size={20} className="text-gray-400" />
+                  </div>
+                  <div className="flex gap-3">
+                    {product.options[0].values.map((color) => (
+                      <button
+                        key={color.id}
+                        className={`w-12 h-12 rounded-full border-2 ${
+                          selectedColor === color.id ? 'border-[#FFD700]' : 'border-gray-200'
+                        }`}
+                        onClick={() => setSelectedColor(color.id)}
+                        disabled={!color.available}
+                      >
+                        {color.image && (
+                          <div 
+                            className="w-full h-full rounded-full overflow-hidden"
+                            style={{ opacity: color.available ? 1 : 0.5 }}
+                          >
+                            <Image
+                              src={color.image}
+                              alt={color.label}
+                              width={48}
+                              height={48}
+                              className="object-cover w-full h-full"
+                            />
+                          </div>
+                        )}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-                <div className="flex gap-3">
-                  {product.options[0].values.map((color) => (
-                    <button
-                      key={color.id}
-                      className={`w-12 h-12 rounded-full border-2 ${
-                        selectedColor === color.id ? 'border-[#FFD700]' : 'border-gray-200'
-                      }`}
-                      onClick={() => setSelectedColor(color.id)}
-                      disabled={!color.available}
-                    >
-                      {color.image && (
-                        <div 
-                          className="w-full h-full rounded-full overflow-hidden"
-                          style={{ opacity: color.available ? 1 : 0.5 }}
-                        >
-                          <Image
-                            src={color.image}
-                            alt={color.label}
-                            width={48}
-                            height={48}
-                            className="object-cover w-full h-full"
-                          />
-                        </div>
-                      )}
-                    </button>
-                  ))}
-                </div>
-              </div>
+              )}
 
               {/* Storage Options */}
-              <div className="space-y-3">
-                <div className="flex justify-between items-center">
-                  <span className="font-medium text-gray-600">Storage</span>
-                  <ChevronDown size={20} className="text-gray-400" />
+              {product.options?.[1]?.values && (
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium text-gray-600">Storage</span>
+                    <ChevronDown size={20} className="text-gray-400" />
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    {product.options[1].values.map((storage) => (
+                      <button
+                        key={storage.id}
+                        className={`p-3 rounded-lg border ${
+                          selectedStorage === storage.id
+                            ? 'border-[#FFD700] bg-[#FFD700]/10'
+                            : 'border-gray-200'
+                        } ${!storage.available ? 'opacity-50' : ''}`}
+                        onClick={() => setSelectedStorage(storage.id)}
+                        disabled={!storage.available}
+                      >
+                        <span className={`text-sm font-medium ${selectedStorage === storage.id ? 'text-[#FFD700]' : 'text-gray-400'}`}>
+                          {storage.label}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
                 </div>
-                <div className="grid grid-cols-2 gap-2">
-                  {product.options[1].values.map((storage) => (
-                    <button
-                      key={storage.id}
-                      className={`p-3 rounded-lg border ${
-                        selectedStorage === storage.id
-                          ? 'border-[#FFD700] bg-[#FFD700]/10'
-                          : 'border-gray-200'
-                      } ${!storage.available ? 'opacity-50' : ''}`}
-                      onClick={() => setSelectedStorage(storage.id)}
-                      disabled={!storage.available}
-                    >
-                      <span className={`text-sm font-medium ${selectedStorage === storage.id ? 'text-[#FFD700]' : 'text-gray-400'}`}>
-                        {storage.label}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-              </div>
+              )}
             </div>
           </div>
 
