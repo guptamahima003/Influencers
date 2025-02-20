@@ -116,10 +116,10 @@ const stories: StoryType[] = [
 
 interface InstagramVideo {
   username: string;
-  followers: number; // Note: Instagram API doesn't provide follower count
+  followers: number;
   description: string;
   profileImage: string;
-  videoUrl: string;
+  videoId: string;
 }
 
 // Add this component for the premium header
@@ -196,16 +196,37 @@ export default function Home() {
       try {
         const instagramMedia = await fetchInstagramHashtagMedia();
         
-        // Filter for videos only and transform to our format
-        const videoContent = instagramMedia
-          .filter(media => media.media_type === 'VIDEO')
-          .map(media => ({
-            username: media.username,
-            followers: Math.floor(Math.random() * 50000) + 10000, // Random follower count for demo
-            description: media.caption || '',
-            profileImage: media.profileImage, // Use the profile image from mock data
-            videoUrl: media.media_url
-          }));
+        // Update the video content mapping to use the YouTube video IDs
+        const videoContent = [
+          {
+            username: "Best Buy",
+            followers: 1200000,
+            description: "Check out the latest tech at Best Buy! #bestbuy #tech",
+            profileImage: "https://randomuser.me/api/portraits/men/21.jpg",
+            videoId: "b4IF6wfLi8M",
+          },
+          {
+            username: "Tech Deals",
+            followers: 850000,
+            description: "Best Buy Gaming Laptop Deals 2024 #gaming #laptops",
+            profileImage: "https://randomuser.me/api/portraits/men/22.jpg",
+            videoId: "pNvC9a3ABo0",
+          },
+          {
+            username: "Gadget Guide",
+            followers: 950000,
+            description: "Top 5 Smartphones at Best Buy #phones #tech",
+            profileImage: "https://randomuser.me/api/portraits/men/23.jpg",
+            videoId: "FHBo5RgFnSk",
+          },
+          {
+            username: "Tech Today",
+            followers: 750000,
+            description: "Best Buy Home Theater Setup Guide #hometheater",
+            profileImage: "https://randomuser.me/api/portraits/men/24.jpg",
+            videoId: "wci_Yscw0B4",
+          }
+        ];
 
         setVideos(videoContent);
       } catch (error) {
@@ -293,7 +314,7 @@ export default function Home() {
                   <VideoCard
                     key={index}
                     {...video}
-                    id={video.videoUrl}
+                    id={`video-${index}`}
                     product={mockProduct}
                     onNext={handleNextVideo}
                     onPrevious={handlePreviousVideo}
@@ -318,7 +339,7 @@ export default function Home() {
                   <VideoCard
                     key={index + 2}
                     {...video}
-                    id={video.videoUrl}
+                    id={`video-${index + 2}`}
                     product={mockProduct}
                     onNext={handleNextVideo}
                     onPrevious={handlePreviousVideo}

@@ -1,19 +1,29 @@
 "use client";
 
-import { useEffect, useRef, useState, TouchEvent } from 'react';
-import Image from 'next/image';
-import { ShoppingBag, Heart, Volume2, Eye, Play, Pause, X, MessageCircle, ThumbsUp } from 'lucide-react';
-import ProductBottomSheet from './ProductBottomSheet';
-import { ProductDetails } from '../types';
-import { useInteractions } from '../context/InteractionsContext';
-import CommentSheet from './CommentSheet';
+import { useEffect, useRef, useState, TouchEvent } from "react";
+import Image from "next/image";
+import {
+  ShoppingBag,
+  Heart,
+  Volume2,
+  Eye,
+  Play,
+  Pause,
+  X,
+  MessageCircle,
+  ThumbsUp,
+} from "lucide-react";
+import ProductBottomSheet from "./ProductBottomSheet";
+import { ProductDetails } from "../types";
+import { useInteractions } from "../context/InteractionsContext";
+import CommentSheet from "./CommentSheet";
 
 interface VideoCardProps {
   username: string;
   followers: number;
   description: string;
   profileImage: string;
-  videoUrl: string;
+  videoId: string;
   onNext?: () => void;
   onPrevious?: () => void;
   isFirst?: boolean;
@@ -29,7 +39,7 @@ export default function VideoCard({
   followers,
   description,
   profileImage,
-  videoUrl,
+  videoId,
   onNext,
   onPrevious,
   isFirst,
@@ -37,128 +47,111 @@ export default function VideoCard({
   isFullscreen = false,
   onFullscreenChange,
   product,
-  id
+  id,
 }: VideoCardProps) {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const fullscreenVideoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isMuted, setIsMuted] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
   const touchStartY = useRef(0);
   const touchEndY = useRef(0);
   const minSwipeDistance = 50;
-  const [slideDirection, setSlideDirection] = useState<'up' | 'down'>('up');
+  const [slideDirection, setSlideDirection] = useState<"up" | "down">("up");
   const [isProductSheetOpen, setIsProductSheetOpen] = useState(false);
   const [isCommentSheetOpen, setIsCommentSheetOpen] = useState(false);
-  const { isLiked, isSaved, toggleLike, toggleSave, getComments } = useInteractions();
+  const { isLiked, isSaved, toggleLike, toggleSave, getComments } =
+    useInteractions();
   const comments = getComments(id);
 
+  const getYouTubeEmbedUrl = (
+    videoId: string,
+    options: { autoplay?: boolean; muted?: boolean } = {}
+  ) => {
+    const baseUrl = "https://www.youtube.com/embed/";
+    const params = new URLSearchParams({
+      enablejsapi: "1",
+      controls: "0",
+      mute: options.muted ? "1" : "0",
+      autoplay: options.autoplay ? "1" : "0",
+      playsinline: "1",
+      loop: "1",
+      modestbranding: "1",
+      rel: "0",
+      playlist: videoId,
+      origin: typeof window !== "undefined" ? window.location.origin : "",
+    });
+    return `${baseUrl}${videoId}?${params.toString()}`;
+  };
+
   useEffect(() => {
-    const video = videoRef.current;
-    const fullscreenVideo = fullscreenVideoRef.current;
     const container = containerRef.current;
-    if (!video || !container) return;
+    if (!container) return;
 
-    const handlePlay = () => setIsPlaying(true);
-    const handlePause = () => setIsPlaying(false);
-
-    video.addEventListener('play', handlePlay);
-    video.addEventListener('pause', handlePause);
-    if (fullscreenVideo) {
-      fullscreenVideo.addEventListener('play', handlePlay);
-      fullscreenVideo.addEventListener('pause', handlePause);
-    }
-
-    // Create intersection observer with 70% threshold
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
+          const iframe = entry.target.querySelector("iframe");
+          if (!iframe) return;
+
           if (entry.intersectionRatio >= 0.7) {
-            // Play video when 70% or more is visible
-            video.play().catch(error => {
-              console.error("Video playback failed:", error);
-              setIsPlaying(false);
+            iframe.src = getYouTubeEmbedUrl(videoId, {
+              autoplay: true,
+              muted: isMuted,
             });
+            setIsPlaying(true);
           } else {
-            // Pause when less than 70% visible
-            video.pause();
+            iframe.src = getYouTubeEmbedUrl(videoId, {
+              autoplay: false,
+              muted: isMuted,
+            });
             setIsPlaying(false);
           }
         });
       },
       {
-        threshold: [0.7]
+        threshold: [0.7],
       }
     );
 
-    // Start observing the container
     observer.observe(container);
-
-    return () => {
-      video.removeEventListener('play', handlePlay);
-      video.removeEventListener('pause', handlePause);
-      if (fullscreenVideo) {
-        fullscreenVideo.removeEventListener('play', handlePlay);
-        fullscreenVideo.removeEventListener('pause', handlePause);
-      }
-      observer.unobserve(container);
-      video.pause();
-      if (fullscreenVideo) fullscreenVideo.pause();
-    };
-  }, []);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    const fullscreenVideo = fullscreenVideoRef.current;
-    
-    if (isFullscreen && fullscreenVideo) {
-      // Reset fullscreen video state
-      fullscreenVideo.currentTime = 0;
-      fullscreenVideo.muted = isMuted;
-      fullscreenVideo.play().catch(error => {
-        console.error("Fullscreen video playback failed:", error);
-        setIsPlaying(false);
-      });
-    } else {
-      // When exiting fullscreen, cleanup
-      if (fullscreenVideo) {
-        fullscreenVideo.pause();
-        fullscreenVideo.currentTime = 0;
-      }
-    }
-  }, [isFullscreen, isMuted]);
+    return () => observer.unobserve(container);
+  }, [videoId, isMuted]);
 
   const handleTap = (e: React.MouseEvent) => {
     e.stopPropagation();
     onFullscreenChange?.(true);
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = "hidden";
   };
 
   const closeFullscreen = () => {
     onFullscreenChange?.(false);
-    document.body.style.overflow = '';
+    document.body.style.overflow = "";
   };
 
   const togglePlayPause = (e: React.MouseEvent) => {
     e.stopPropagation();
-    const video = isFullscreen ? fullscreenVideoRef.current : videoRef.current;
-    if (!video) return;
+    const newIsPlaying = !isPlaying;
+    setIsPlaying(newIsPlaying);
 
-    if (video.paused) {
-      video.play().catch(error => {
-        console.error("Play failed:", error);
+    const iframe = containerRef.current?.querySelector("iframe");
+    if (iframe) {
+      iframe.src = getYouTubeEmbedUrl(videoId, {
+        autoplay: newIsPlaying,
+        muted: isMuted,
       });
-    } else {
-      video.pause();
     }
   };
 
   const toggleMute = (e: React.MouseEvent) => {
     e.stopPropagation();
-    const video = isFullscreen ? fullscreenVideoRef.current : videoRef.current;
-    if (video) {
-      video.muted = !video.muted;
-      setIsMuted(!isMuted);
+    const newIsMuted = !isMuted;
+    setIsMuted(newIsMuted);
+
+    const iframe = containerRef.current?.querySelector("iframe");
+    if (iframe) {
+      iframe.src = getYouTubeEmbedUrl(videoId, {
+        autoplay: isPlaying,
+        muted: newIsMuted,
+      });
     }
   };
 
@@ -179,10 +172,10 @@ export default function VideoCard({
 
     if (absDistance > minSwipeDistance) {
       if (swipeDistance > 0 && !isLast) {
-        setSlideDirection('up');
+        setSlideDirection("up");
         onNext?.();
       } else if (swipeDistance < 0 && !isFirst) {
-        setSlideDirection('down');
+        setSlideDirection("down");
         onPrevious?.();
       }
     }
@@ -190,24 +183,19 @@ export default function VideoCard({
 
   return (
     <>
-      <div 
+      <div
         className="relative w-full aspect-[5/7] snap-start mx-auto overflow-hidden rounded-xl"
         onClick={handleTap}
         ref={containerRef}
       >
         {/* Video Container */}
         <div className="absolute inset-0 w-full h-full bg-black">
-          <video
-            ref={videoRef}
+          <iframe
+            src={getYouTubeEmbedUrl(videoId, { autoplay: false, muted: true })}
             className="w-full h-full object-cover"
-            autoPlay={false}
-            playsInline
-            loop
-            muted
-            controls={false}
-          >
-            <source src={videoUrl} type="video/mp4" />
-          </video>
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
 
           {/* Play/Pause Overlay */}
           {!isPlaying && (
@@ -217,35 +205,12 @@ export default function VideoCard({
           )}
         </div>
 
-        {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#00B4D8]/40 to-[#0077B6]/80" />
-
-        {/* Content Overlay */}
-        <div className="relative h-full flex flex-col justify-between p-6 z-10">
-          {/* User Info */}
-          <div className="flex items-center gap-3" onClick={e => e.stopPropagation()}>
-            <div className="relative w-10 h-10 rounded-full overflow-hidden bg-gray-300">
-              <Image
-                src={profileImage}
-                alt={username}
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div className="flex-1">
-              <h3 className="text-white font-semibold text-sm">{username}</h3>
-              <p className="text-white/80 text-xs">{followers.toLocaleString()} followers</p>
-            </div>
-            <div className="flex items-center gap-2 text-white/80">
-              <Eye size={18} />
-              <span className="text-sm">564</span>
-            </div>
-          </div>
-
+        {/* Content Overlay - Removed gradient and profile info */}
+        <div className="relative h-full flex flex-col justify-end p-6 z-10">
           {/* Bottom Section */}
-          <div className="space-y-6" onClick={e => e.stopPropagation()}>
+          <div className="space-y-6" onClick={(e) => e.stopPropagation()}>
             {/* Shop CTA */}
-            <button 
+            <button
               className="flex items-center gap-2 bg-[#FFD700] backdrop-blur-md px-5 py-2.5 rounded-full"
               onClick={(e) => {
                 e.stopPropagation();
@@ -262,20 +227,20 @@ export default function VideoCard({
             {/* Controls */}
             <div className="flex justify-between items-center pb-4">
               <div className="flex gap-4">
-                <button 
+                <button
                   onClick={(e) => {
                     e.stopPropagation();
                     toggleLike(id);
                   }}
                   className="text-white hover:scale-110 transition-transform"
                 >
-                  <ThumbsUp 
-                    size={24} 
-                    fill={isLiked(id) ? 'white' : 'none'} 
-                    className={isLiked(id) ? 'text-white' : 'text-white/80'}
+                  <ThumbsUp
+                    size={24}
+                    fill={isLiked(id) ? "white" : "none"}
+                    className={isLiked(id) ? "text-white" : "text-white/80"}
                   />
                 </button>
-                <button 
+                <button
                   onClick={(e) => {
                     e.stopPropagation();
                     setIsCommentSheetOpen(true);
@@ -286,20 +251,20 @@ export default function VideoCard({
                 </button>
               </div>
               <div className="flex gap-4">
-                <button 
+                <button
                   onClick={(e) => {
                     e.stopPropagation();
                     toggleSave(id);
                   }}
                   className="text-white hover:scale-110 transition-transform"
                 >
-                  <Heart 
-                    size={24} 
-                    fill={isSaved(id) ? 'white' : 'none'} 
-                    className={isSaved(id) ? 'text-white' : 'text-white/80'}
+                  <Heart
+                    size={24}
+                    fill={isSaved(id) ? "white" : "none"}
+                    className={isSaved(id) ? "text-white" : "text-white/80"}
                   />
                 </button>
-                <button 
+                <button
                   className="text-white hover:scale-110 transition-transform"
                   onClick={toggleMute}
                 >
@@ -313,28 +278,28 @@ export default function VideoCard({
 
       {/* Fullscreen Modal */}
       {isFullscreen && (
-        <div 
-          className="fixed bg-black z-50" 
-          style={{ 
+        <div
+          className="fixed bg-black z-50"
+          style={{
             margin: 0,
             padding: 0,
             top: 0,
             left: 0,
             right: 0,
             bottom: 0,
-            width: '100vw',
-            height: '100vh'
+            width: "100vw",
+            height: "100vh",
           }}
         >
           {/* Close button and navigation hints container - static */}
           <div className="absolute inset-0 z-50 pointer-events-none">
-            <button 
+            <button
               onClick={closeFullscreen}
               className="absolute top-4 right-4 text-white/80 hover:text-white p-2 pointer-events-auto"
             >
               <X size={24} />
             </button>
-            
+
             {!isFirst && (
               <div className="absolute top-1/4 left-1/2 -translate-x-1/2 text-white/50 text-sm">
                 Swipe down for previous
@@ -348,14 +313,16 @@ export default function VideoCard({
           </div>
 
           {/* Animated video container */}
-          <div 
+          <div
             className="touch-none"
-            style={{ 
+            style={{
               margin: 0,
               padding: 0,
-              width: '100vw',
-              height: '100vh',
-              animation: `${slideDirection === 'up' ? 'slideUp' : 'slideDown'} 0.3s ease-out`
+              width: "100vw",
+              height: "100vh",
+              animation: `${
+                slideDirection === "up" ? "slideUp" : "slideDown"
+              } 0.3s ease-out`,
             }}
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
@@ -363,42 +330,44 @@ export default function VideoCard({
           >
             <style jsx>{`
               @keyframes slideUp {
-                from { transform: translateY(100%); }
-                to { transform: translateY(0); }
+                from {
+                  transform: translateY(100%);
+                }
+                to {
+                  transform: translateY(0);
+                }
               }
               @keyframes slideDown {
-                from { transform: translateY(-100%); }
-                to { transform: translateY(0); }
+                from {
+                  transform: translateY(-100%);
+                }
+                to {
+                  transform: translateY(0);
+                }
               }
             `}</style>
 
             <div className="absolute inset-0">
-              <video
-                ref={fullscreenVideoRef}
+              <iframe
+                src={getYouTubeEmbedUrl(videoId, {
+                  autoplay: true,
+                  muted: isMuted,
+                })}
                 className="w-full h-full object-cover"
-                playsInline
-                loop
-                muted={isMuted}
-                controls={false}
-                src={videoUrl}
-              >
-                <source src={videoUrl} type="video/mp4" />
-              </video>
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
 
               {/* Video Controls */}
               <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/60 to-transparent">
                 <div className="flex justify-between items-center">
-                  <button 
+                  <button
                     onClick={togglePlayPause}
                     className="text-white hover:scale-110 transition-transform"
                   >
-                    {isPlaying ? (
-                      <Pause size={28} />
-                    ) : (
-                      <Play size={28} />
-                    )}
+                    {isPlaying ? <Pause size={28} /> : <Play size={28} />}
                   </button>
-                  <button 
+                  <button
                     onClick={toggleMute}
                     className="text-white hover:scale-110 transition-transform"
                   >
@@ -424,4 +393,4 @@ export default function VideoCard({
       />
     </>
   );
-} 
+}
