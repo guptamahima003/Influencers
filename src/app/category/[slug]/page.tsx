@@ -104,10 +104,13 @@ export default function CategoryPage() {
         {/* Header - Make it sticky */}
         <div className="sticky top-0 z-20 bg-white shadow-sm">
           <div className="px-4 py-3 flex items-center gap-4">
-            <Link href="/" className="text-[#0077B6] hover:text-[#00B4D8]">
+            <Link 
+              href="/" 
+              className="text-[#030303] hover:text-[#030303]/80"
+            >
               <ArrowLeft size={24} />
             </Link>
-            <h1 className="text-[#0077B6] font-bold text-xl capitalize">
+            <h1 className="text-[#030303] font-bold text-xl capitalize">
               {slug?.toString().replace('-', ' ')} Experts
             </h1>
           </div>
@@ -132,12 +135,12 @@ export default function CategoryPage() {
                     />
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-semibold text-[#0077B6]">{influencer.name}</h3>
-                    <p className="text-sm text-[#0077B6]/60">{influencer.username}</p>
-                    <p className="text-sm text-[#0077B6]/80 mt-1">
+                    <h3 className="font-semibold text-[#030303]">{influencer.name}</h3>
+                    <p className="text-sm text-[#030303]/60">{influencer.username}</p>
+                    <p className="text-sm text-[#030303]/80 mt-1">
                       {influencer.followers.toLocaleString()} followers
                     </p>
-                    <p className="text-sm text-[#0077B6]/80 mt-1">{influencer.bio}</p>
+                    <p className="text-sm text-[#030303]/80 mt-1">{influencer.bio}</p>
                   </div>
                   <button className="bg-[#00B4D8] text-white px-4 py-2 rounded-full flex items-center gap-2 hover:bg-[#0077B6] transition-colors">
                     <UserPlus size={18} />
@@ -147,7 +150,7 @@ export default function CategoryPage() {
 
                 {/* Product Carousel */}
                 <div className="ml-4">
-                  <h4 className="text-[#0077B6] font-medium mb-2">
+                  <h4 className="text-[#030303] font-medium mb-2">
                     {influencer.name}'s Recommended Products
                   </h4>
                   <ProductCarousel category={slug as string} />
@@ -156,7 +159,7 @@ export default function CategoryPage() {
             ))
           ) : (
             <div className="text-center py-12">
-              <p className="text-[#0077B6]/60 text-lg">
+              <p className="text-[#030303]/60 text-lg">
                 No influencers found for this category yet.
               </p>
             </div>

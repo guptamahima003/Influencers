@@ -77,10 +77,10 @@ export default function ProductBottomSheet({ isOpen, onClose, product }: Product
           <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-sm">
             <div className="flex justify-between items-center p-4 border-b border-gray-100">
               <button onClick={onClose}>
-                <X size={24} className="text-[#0077B6]/80 hover:text-[#0077B6]" />
+                <X size={24} className="text-[#030303]/80 hover:text-[#030303]" />
               </button>
               <button className="p-2">
-                <Heart size={24} className="text-[#0077B6]/80 hover:text-[#0077B6]" />
+                <Heart size={24} className="text-[#030303]/80 hover:text-[#030303]" />
               </button>
             </div>
           </div>
@@ -102,7 +102,7 @@ export default function ProductBottomSheet({ isOpen, onClose, product }: Product
             {/* Product Info */}
             <div className="p-4 space-y-4">
               <div>
-                <h2 className="text-xl font-semibold text-[#0077B6]">{product.title}</h2>
+                <h2 className="text-xl font-semibold text-[#030303]">{product.title}</h2>
                 <div className="flex items-center gap-2 mt-2">
                   <div className="flex items-center">
                     {[...Array(5)].map((_, i) => (
@@ -122,7 +122,7 @@ export default function ProductBottomSheet({ isOpen, onClose, product }: Product
 
               {/* Price */}
               <div className="flex items-baseline gap-2">
-                <span className="text-2xl font-bold text-[#0077B6]">${product.price}</span>
+                <span className="text-2xl font-bold text-[#030303]">${product.price}</span>
                 {product.originalPrice && (
                   <span className="text-gray-400 line-through">${product.originalPrice}</span>
                 )}
@@ -207,12 +207,12 @@ export default function ProductBottomSheet({ isOpen, onClose, product }: Product
           <div className="sticky bottom-0 bg-white/95 backdrop-blur-sm border-t border-gray-100 p-4 flex gap-3">
             <button 
               onClick={handleAddToCart}
-              className="flex-1 bg-[#0077B6] text-white py-3 rounded-lg font-medium hover:bg-[#0077B6]/90 transition-colors"
+              className="flex-1 bg-[#030303] text-white py-3 rounded-lg font-medium hover:bg-[#030303]/90 transition-colors"
             >
               Add to Cart
             </button>
             <button 
-              className="flex-1 bg-gray-100 text-[#0077B6] py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors"
+              className="flex-1 bg-gray-100 text-[#030303] py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors"
             >
               See Details
             </button>

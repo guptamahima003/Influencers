@@ -132,17 +132,17 @@ export default function YouTubeShorts() {
       {/* Reduced heading font size */}
       <div className="px-4 mb-6">
         <div className="flex items-center justify-between mb-2">
-          <h2 className="text-base font-bold text-white flex items-center gap-2">
+          <h2 className="text-base font-bold text-[#030303] flex items-center gap-2">
             <span className="text-[#FFE000]">#BestBuy</span>
-            <span className="bg-gradient-to-r from-white to-white/80 text-transparent bg-clip-text">
+            <span className="text-[#030303]">
               Premium Tech
             </span>
           </h2>
-          <button className="text-[#FFE000] text-xs font-medium hover:text-white transition-colors">
+          <button className="text-[#FFE000] text-xs font-medium hover:text-[#030303] transition-colors">
             View All
           </button>
         </div>
-        <p className="text-white/60 text-xs">Discover the latest tech reviews and unboxings</p>
+        <p className="text-[#030303]/60 text-xs">Discover the latest tech reviews and unboxings</p>
       </div>
 
       {/* Premium Grid Layout */}

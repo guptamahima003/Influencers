@@ -38,7 +38,7 @@ export default function Story({ story, onClick, index }: StoryProps) {
           )}
         </div>
       </div>
-      <span className="text-[#0077B6] font-medium text-xs truncate w-16 text-center">
+      <span className="text-[#030303] font-medium text-xs truncate w-16 text-center">
         {story.username}
       </span>
     </button>

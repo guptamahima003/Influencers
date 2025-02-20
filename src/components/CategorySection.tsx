@@ -44,7 +44,7 @@ const categories = [
 export default function CategorySection() {
   return (
     <div className="py-6 px-4">
-      <h2 className="text-[#0077B6] font-bold text-lg mb-4">
+      <h2 className="text-[#030303] font-bold text-lg mb-4">
         Follow Our Top Influencers
       </h2>
       <div className="grid grid-cols-2 gap-4">

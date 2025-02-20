@@ -122,13 +122,13 @@ export default function ProductCarousel({ category }: ProductCarouselProps) {
         onClick={() => scroll('left')}
         className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 rounded-full p-2 shadow-lg hover:bg-white transition-colors"
       >
-        <ChevronLeft size={24} className="text-[#0077B6]" />
+        <ChevronLeft size={24} className="text-[#030303]" />
       </button>
       <button 
         onClick={() => scroll('right')}
         className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 rounded-full p-2 shadow-lg hover:bg-white transition-colors"
       >
-        <ChevronRight size={24} className="text-[#0077B6]" />
+        <ChevronRight size={24} className="text-[#030303]" />
       </button>
 
       {/* Products Container */}
@@ -153,11 +153,11 @@ export default function ProductCarousel({ category }: ProductCarouselProps) {
               />
             </div>
             <div className="p-4">
-              <h3 className="text-[#0077B6] font-medium text-sm line-clamp-2">
+              <h3 className="text-[#030303] font-medium text-sm line-clamp-2">
                 {product.title}
               </h3>
               <div className="mt-2 flex items-center justify-between">
-                <span className="text-[#0077B6] font-bold">
+                <span className="text-[#030303] font-bold">
                   ${product.price}
                 </span>
                 <button 

@@ -128,8 +128,8 @@ function PremiumHeader() {
 
   return (
     <div className="sticky top-0 z-20 w-full">
-      {/* Gradient Background with Blur */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#00B4D8] via-[#0077B6] to-[#00B4D8] opacity-90 backdrop-blur-lg" />
+      {/* Gradient Background with Blur - Updated colors */}
+      <div className="absolute inset-0 bg-gradient-to-r from-[#36B9DA] via-[#0046BE] to-[#36B9DA] opacity-90 backdrop-blur-lg" />
       
       {/* Content */}
       <div className="relative w-full">
@@ -257,7 +257,7 @@ export default function Home() {
 
         {/* Stories Section */}
         <div>
-          <h2 className="text-[#0077B6] font-bold text-lg px-4 py-3">
+          <h2 className="text-[#030303] font-bold text-lg px-4 py-3">
             Guide to influencers' go-to gadgets
           </h2>
           <div className="py-2 backdrop-blur-sm border-b border-[#90E0EF]/20">
@@ -288,7 +288,7 @@ export default function Home() {
               </div>
             ) : videos.length > 0 ? (
               <>
-                <h2 className="text-[#0077B6] font-bold text-lg mb-4">Featured Videos</h2>
+                <h2 className="text-[#030303] font-bold text-lg mb-4">Featured Videos</h2>
                 {videos.slice(0, 2).map((video, index) => (
                   <VideoCard
                     key={index}
@@ -306,14 +306,14 @@ export default function Home() {
 
                 {/* YouTube Shorts Section */}
                 <div className="space-y-4">
-                  <h2 className="text-[#0077B6] font-bold text-lg">Trending Shorts</h2>
+                  <h2 className="text-[#030303] font-bold text-lg">Trending Shorts</h2>
                   <div className="relative">
                     <div className="absolute -inset-1 bg-gradient-to-r from-[#FFD700] to-[#0077B6] rounded-2xl blur opacity-10"></div>
                     <YouTubeShorts />
                   </div>
                 </div>
 
-                <h2 className="text-[#0077B6] font-bold text-lg mt-6 mb-4">More Videos</h2>
+                <h2 className="text-[#030303] font-bold text-lg mt-6 mb-4">More Videos</h2>
                 {videos.slice(2).map((video, index) => (
                   <VideoCard
                     key={index + 2}
@@ -330,7 +330,7 @@ export default function Home() {
                 ))}
               </>
             ) : (
-              <div className="text-center py-6 text-[#0077B6]/60 text-sm">
+              <div className="text-center py-6 text-[#030303]/60 text-sm">
                 No videos found with #bestbuy
               </div>
             )}
